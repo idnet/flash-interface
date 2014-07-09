@@ -10,12 +10,12 @@
 	import flash.net.URLVariables;
 	import flash.system.Security;
 	import flash.system.SecurityDomain;
-    import flash.system.ApplicationDomain;
-    import flash.system.LoaderContext;
-	
+	import flash.system.ApplicationDomain;
+	import flash.system.LoaderContext;
+
 	public class main extends MovieClip {
 		public var idnet;
-		public var appID:String = 'YOUR APP ID';
+		public var appID:String = '53861fc7f411ecaf65002045';
 		public var secretKey:String = 'YOUR SECRET KEY';
 
 		/** 
@@ -34,9 +34,9 @@
 		*/
 		private function onStage(e:Event):void {
 			var loaderContext:LoaderContext = new LoaderContext();
-    		loaderContext.applicationDomain = ApplicationDomain.currentDomain;
-			if(Security.sandboxType != "localTrusted"){
-   				loaderContext.securityDomain = SecurityDomain.currentDomain; // Sets the security 
+			loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+			if (Security.sandboxType != "localTrusted") {
+				loaderContext.securityDomain = SecurityDomain.currentDomain;// Sets the security 
 			}
 			var sdk_url:String = "https://www.id.net/swf/idnet-client.swc?="+new Date().getTime();
 			var urlRequest:URLRequest = new URLRequest(sdk_url);
@@ -49,7 +49,7 @@
 		* 
 		* @param e Event listener reference.
 		*/
-		function loadComplete(e:Event):void{
+		function loadComplete(e:Event):void {
 			idnet = e.currentTarget.content;
 			idnet.addEventListener('IDNET', handleIDNET);
 			stage.addChild(idnet);
@@ -61,30 +61,34 @@
 		* @param e MouseEvent listener reference.
 		*/
 		function handleDemoClicks(e:MouseEvent) {
-			if(e.target.name == 'scoreSubmit'){
-				//this.idnet.submitScore(scoreTxt.text);
-			}
-			if(e.target.name == 'scoreBut'){
-				this.idnet.toggleInterface('scoreBox');
-			}
-			if(e.target.name == 'regBut'){
-				this.idnet.toggleInterface('registration');
-			}
-			if(e.target.name == 'loginBut'){
-				this.idnet.toggleInterface();
-			}
-			if(e.target.name == 'getBut'){
-				this.idnet.retrieveUserData(keyTxt.text);
-			}
-			if(e.target.name == 'setBut'){
-				this.idnet.submitUserData(key2Txt.text, dataTxt.text);
-			}
-			if(e.target.name == 'deleteBut'){
-				this.idnet.removeUserData(key3Txt.text);
-			}
-			if(e.target.name == 'logoutBut'){
-				// This is for testing. It's not needed for most applications.
-				this.idnet.logout();
+			if (idnet) {
+				if (e.target.name == 'scoreSubmit') {
+					//this.idnet.submitScore(scoreTxt.text);
+				}
+				if (e.target.name == 'scoreBut') {
+					this.idnet.toggleInterface('scoreBox');
+				}
+				if (e.target.name == 'regBut') {
+					this.idnet.toggleInterface('registration');
+				}
+				if (e.target.name == 'loginBut') {
+					this.idnet.toggleInterface();
+				}
+				if (e.target.name == 'getBut') {
+					this.idnet.retrieveUserData(keyTxt.text);
+				}
+				if (e.target.name == 'setBut') {
+					this.idnet.submitUserData(key2Txt.text, dataTxt.text);
+				}
+				if (e.target.name == 'deleteBut') {
+					this.idnet.removeUserData(key3Txt.text);
+				}
+				if (e.target.name == 'logoutBut') {
+					// This is for testing. It's not needed for most applications.
+					this.idnet.logout();
+				}
+			} else {
+				trace('Interface not loaded yet.');
 			}
 		}
 		/** 
@@ -94,28 +98,28 @@
 		* @param e IDNET Event listener reference.
 		*/
 		function handleIDNET(e:Event) {
-			if(idnet.type == 'login'){
-				if(idnet.data.hasOwnProperty('error') === false){
+			if (idnet.type == 'login') {
+				if (idnet.data.hasOwnProperty('error') === false) {
 					trace('Session Key: '+idnet.data.sessionKey);
 					trace('Email: '+idnet.data.user.email);
 					trace('Nickname: '+idnet.data.user.nickname);
 					trace('Pid: '+idnet.data.user.pid);
-				}else{
+				} else {
 					trace('Error: '+idnet.data.error);
 				}
 			}
-			if(idnet.type == 'submit'){
-				if(idnet.data.hasOwnProperty('error') === false){
+			if (idnet.type == 'submit') {
+				if (idnet.data.hasOwnProperty('error') === false) {
 					trace('Status: '+idnet.data.status);
-				}else{
+				} else {
 					trace('Error: '+idnet.data.error);
 				}
 			}
-			if(idnet.type == 'retrieve'){
-				if(idnet.data.hasOwnProperty('error') === false){
+			if (idnet.type == 'retrieve') {
+				if (idnet.data.hasOwnProperty('error') === false) {
 					trace('Key '+idnet.data.key);
 					trace('Data: '+idnet.data.jsondata);
-				}else{
+				} else {
 					trace('Error: '+idnet.data.error);
 				}
 			}
