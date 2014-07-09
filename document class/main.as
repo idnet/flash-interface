@@ -15,7 +15,7 @@
 
 	public class main extends MovieClip {
 		public var idnet;
-		public var appID:String = '53861fc7f411ecaf65002045';
+		public var appID:String = 'YOUR APP ID';
 		public var secretKey:String = 'YOUR SECRET KEY';
 
 		/** 
