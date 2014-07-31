@@ -63,10 +63,10 @@
 		function handleDemoClicks(e:MouseEvent) {
 			if (idnet) {
 				if (e.target.name == 'scoreSubmit') {
-					//this.idnet.submitScore(scoreTxt.text);
+					this.idnet.submitScore(scoreTxt.text);
 				}
 				if (e.target.name == 'scoreBut') {
-					this.idnet.toggleInterface('scoreBox');
+					this.idnet.toggleInterface('scoreboard');
 				}
 				if (e.target.name == 'regBut') {
 					this.idnet.toggleInterface('registration');
