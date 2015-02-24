@@ -18,51 +18,57 @@
 		// please read http://dev.id.net/docs/actionscript/ for details about this example
 		private var appID:String = 'YOUR APP ID';// your application id
 		private var verbose = true;// display idnet messages
+		
+		private var gameSave1 = {
+			level: 31,
+			health: 66,
+			inventory: [
+				['healthpotion', 9],
+				['sword', 'beastmode']
+			]
+		};
 
 		// Event listener to handle the buttons in the example
 		function handleDemoClicks(e:MouseEvent) {
 			if (idnet) {
-				// main buttons
 				if (e.target.name == 'loginBut') {
-					this.idnet.toggleInterface();
+					idnet.toggleInterface();
 				}
 				if (e.target.name == 'regBut') {
-					this.idnet.toggleInterface('registration');
-				}
-				if (e.target.name == 'scoreBut') {
-					this.idnet.toggleInterface('scoreboard');
+					idnet.toggleInterface('registration');
 				}
 				// Logout is for testing only, please do Not use it in games. Logout is handled through id.net.
 				if (e.target.name == 'logoutBut') {
-					this.idnet.logout();
-				}
-				// save string buttons
+					idnet.logout();
+				}		
+				// data save buttons
 				if (e.target.name == 'setBut') {
-					this.idnet.submitUserData(saveStrKey.text, strToSave.text);
+					idnet.submitUserData('gameSave1', JSON.stringify(gameSave1));
 				}
 				if (e.target.name == 'getBut') {
-					this.idnet.retrieveUserData(getStrKey.text);
+					idnet.retrieveUserData('gameSave1');
 				}
 				if (e.target.name == 'deleteBut') {
-					this.idnet.removeUserData(deleteStrKey.text);
-				}
-				// save object buttons
-				if (e.target.name == 'setObjBut') {
-					// normally the object is already in an object type. For the example, we parse a string to visualize it.
-					var object = JSON.parse(objToSave.text);
-					this.idnet.submitUserData(saveObjKey.text, JSON.stringify(object));
-				}
-				if (e.target.name == 'getObjBut') {
-					this.idnet.retrieveUserData(saveObjKey.text);
+					idnet.removeUserData('gameSave1');
 				}
 				// score buttons
-				if (e.target.name == 'getScore') {
-					this.idnet.getPlayersScore();
+				if(e.target.name == 'advancedScoreListBut'){
+					idnet.advancedScoreList('Demo High Scores');
 				}
-				if (e.target.name == 'scoreSubmit') {
-					this.idnet.submitScore(scoreSet.text);
+				var randScore = Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
+				if(e.target.name == 'advancedScoreSubmitBut'){
+					idnet.advancedScoreSubmit(randScore, 'Demo High Scores');
 				}
-
+				if(e.target.name == 'advancedScoreSubmitListBut'){
+					idnet.advancedScoreSubmitList(randScore, 'Demo High Scores');
+				}
+				if(e.target.name == 'advancedScoreListPlayerBut'){
+					idnet.advancedScoreListPlayer('Demo High Scores');
+				}
+				// achievements (not finished)
+				if(e.target.name == 'achievementListBut'){
+					idnet.toggleInterface('achievements');
+				}
 			} else {
 				trace('Interface not loaded yet.');
 			}
@@ -80,23 +86,12 @@
 				if (idnet.data.hasOwnProperty('error') === false) {
 					trace('Key '+idnet.data.key);
 					trace('Data: '+idnet.data.jsondata);
-
-					// in this example, we are saving strings and the gameSave object, so we check for that here.
-					if (idnet.data.key == 'gameSave') {
-						var retrievedObj = decodeURIComponent(idnet.data.jsondata);
-						objToGet.text = retrievedObj;
-						// normally you would want this back into an object to work with. Here we keep it as text to visualize it.
-						// var gameSave = JSON.parse(retrievedObj);
-					} else {
-						// we decode string to make sure accented characters are returned as normal
-						strToGet.text = decodeURIComponent(idnet.data.jsondata);
-					}
 				} else {
 					trace('Error: '+idnet.data.error);
 				}
 			}
-			if (idnet.type == 'getScore') {
-				scoreGet.text = idnet.data.score;
+			if(idnet.type == 'advancedScoreListPlayer'){
+				trace('player score: '+idnet.data.scores[0].points);
 			}
 		}
 
