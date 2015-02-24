@@ -5,7 +5,7 @@ The IDnet Flash interface allows secure authentication across applications.
 For full documentation visit https://www.id.net/asdocs/IDNET.html
 
 Features:
-- Cross application user authentication
+- Cross application user authentication with autologin
 - Save and get stored data no matter where your app is hosted
 - Advanced highscores with multi-tables, high and low sorting, guest scores, and more
 - Application statistics
