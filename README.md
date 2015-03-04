@@ -11,4 +11,5 @@ Features:
 - Application statistics (AS3 only)
 - Achievements (AS3 only)
 - Player maps (AS3 only)
+- Traffic Flux enabled preloader ads (coming soon)
 - Simple highscores (deprecated)
