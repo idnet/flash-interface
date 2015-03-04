@@ -16,8 +16,9 @@
 	public class main extends MovieClip {
 		public var idnet;
 		// please read http://dev.id.net/docs/actionscript/ for details about this example
-		private var appID:String = 'YOUR APP ID';// your application id
-		private var verbose = true;// display idnet messages
+		private var appID = 'YOUR APP ID'; // your application id
+		private var verbose = true; // display idnet messages
+		private var showPreloader = false; // Display Traffic Flux preloader ad
 		
 		private var gameSave1 = {
 			level: 31,
@@ -29,8 +30,9 @@
 		};
 
 		// Event listener to handle the buttons in the example
-		function handleDemoClicks(e:MouseEvent) {
+		private function handleDemoClicks(e:MouseEvent) {
 			if (idnet) {
+				// main buttons
 				if (e.target.name == 'loginBut') {
 					idnet.toggleInterface();
 				}
@@ -53,48 +55,83 @@
 				}
 				// score buttons
 				if(e.target.name == 'advancedScoreListBut'){
-					idnet.advancedScoreList('Demo High Scores');
+					idnet.advancedScoreList('Table Name');
 				}
 				var randScore = Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
 				if(e.target.name == 'advancedScoreSubmitBut'){
-					idnet.advancedScoreSubmit(randScore, 'Demo High Scores');
+					idnet.advancedScoreSubmit(randScore, 'Table Name');
 				}
 				if(e.target.name == 'advancedScoreSubmitListBut'){
-					idnet.advancedScoreSubmitList(randScore, 'Demo High Scores');
+					idnet.advancedScoreSubmitList(randScore, 'Table Name');
 				}
 				if(e.target.name == 'advancedScoreListPlayerBut'){
-					idnet.advancedScoreListPlayer('Demo High Scores');
+					idnet.advancedScoreListPlayer('Table Name');
 				}
-				// achievements (not finished)
+				// achievements
 				if(e.target.name == 'achievementListBut'){
 					idnet.toggleInterface('achievements');
 				}
+				if(e.target.name == 'unlockBut'){
+					idnet.achievementsSave('achievement name', 'achievementkey');
+				}
+				// player maps
+				if(e.target.name == 'mapListBut'){
+					idnet.toggleInterface('playerMaps');
+				}
+				if(e.target.name == 'mapSaveBut'){
+					idnet.mapSave('Test Map', '{"testmap": [[0, 1],[1,0]]}');
+				}
+				if(e.target.name == 'mapLoadBut'){
+					idnet.mapLoad('12312342sdfsdf');
+				}
+				if(e.target.name == 'mapRateBut'){
+					idnet.mapRate('12312342sdfsdf', 10);
+				}
 			} else {
-				trace('Interface not loaded yet.');
+				log('Interface not loaded yet.');
 			}
 		}
 		// handleIDNET is where you will want to edit to send data to the rest of your application. 
-		function handleIDNET(e:Event) {
+		private function handleIDNET(e:Event) {
 			if (idnet.type == 'login') {
-				trace('Nickname: '+idnet.data.user.nickname);
-				trace('Pid: '+idnet.data.user.pid);
+				log('hello '+idnet.userData.nickname+' your pid is '+idnet.userData.pid);
 			}
 			if (idnet.type == 'submit') {
-				trace('Status: '+idnet.data.status);
+				log('data submitted. status is '+idnet.data.status);
 			}
 			if (idnet.type == 'retrieve') {
 				if (idnet.data.hasOwnProperty('error') === false) {
-					trace('Key '+idnet.data.key);
-					trace('Data: '+idnet.data.jsondata);
+					log('LOG: data retrieved. key is '+idnet.data.key+' data is '+idnet.data.jsondata);
 				} else {
-					trace('Error: '+idnet.data.error);
+					log('Error: '+idnet.data.error);
 				}
 			}
-			if(idnet.type == 'advancedScoreListPlayer'){
-				trace('player score: '+idnet.data.scores[0].points);
+			if (idnet.type == 'delete'){
+				log('deleted data '+idnet.data);
+			}
+	
+			if (idnet.type == 'advancedScoreListPlayer'){
+				log('player score: '+idnet.data.scores[0].points);
+			}
+			if (idnet.type == 'achievementsSave'){
+				if(idnet.data.errorcode == 0){
+					log('achievement unlocked');
+				}
+			}
+			if (idnet.type == 'mapSave'){
+				log('map saved. levelid is '+idnet.data.level.levelid);
+			}
+			if (idnet.type == 'mapLoad'){
+				log(idnet.data.level.name+' loaded');
+			}
+			if (idnet.type == 'mapRate'){
+				log('rating added');
 			}
 		}
-
+		
+		private function log(message){
+			trace('LOG: '+message);
+		}
 
 		// Below is the loader for the id.net interface. Do Not edit below.
 		public function main() {
@@ -120,7 +157,7 @@
 			idnet = e.currentTarget.content;
 			idnet.addEventListener('IDNET', handleIDNET);
 			stage.addChild(idnet);
-			idnet.init(stage, appID, '', verbose);
+			idnet.init(stage, appID, '', verbose, showPreloader);
 		}
 	}
 }
